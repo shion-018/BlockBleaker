@@ -1,72 +1,73 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class SetUpScript : MonoBehaviour
 {
     // Start is called before the first frame update
-    // ƒIƒuƒWƒFƒNƒg‚ğ¶¬‚·‚éŒ³‚Æ‚È‚éPrefab‚Ö‚ÌQÆ‚ğ•Û‚µ‚Ü‚·B
-    public GameObject prefabObj;
+    // ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã™ã‚‹å…ƒã¨ãªã‚‹Prefabã¸ã®å‚ç…§ã‚’ä¿æŒã—ã¾ã™ã€‚
+    [SerializeField] GameObject prefabBlock = default!;
+    [SerializeField] TextMeshProUGUI life_rest = default!;
+    int life = 3;// æ®‹å¼¾æ•°
 
-    // ¶¬‚µ‚½ƒIƒuƒWƒFƒNƒg‚ÌeƒIƒuƒWƒFƒNƒg‚Ö‚ÌQÆ‚ğ•Û‚µ‚Ü‚·B
-    public Transform parentTran;
-    public static int block_number;
-    int row;
-    int column;
-    float xOffset;
-    float yOffset;
+    int block_number = 0;
 
     void Start()
     {
-        row = 2;
-        column = 3;
-        block_number = 6;
-        xOffset = 30f;
-        yOffset = 30f;
-        CreateBlockObject();
-        BallScript.blocks = block_number;
+        CreateBlockObject(2, 3, 30f, 30f);// Stage1
     }
 
-    void Update()
+    void createStage2()
     {
-        if (BallScript.blocks <= 0)
-        {
-            stage2create();
-            BallScript.blocks = block_number;
-        }
+        CreateBlockObject(5, 4, 20f, 10f);// Stega2ä»¥é™
     }
+
     /// <Summary>
-    /// Prefab‚©‚çƒuƒƒbƒN‚Æ‚µ‚Äg‚¤ƒIƒuƒWƒFƒNƒg‚ğ¶¬‚µ‚Ü‚·B
+    /// Prefabã‹ã‚‰ãƒ–ãƒ­ãƒƒã‚¯ã¨ã—ã¦ä½¿ã†ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã—ã¾ã™ã€‚
     /// </Summary>
-    void CreateBlockObject()
+    void CreateBlockObject(int row, int column, float xOffset, float yOffset)
     {
-        
+        block_number = row * column;
+
         for (int j = 0; j < row; j++)
         {
             for (int i = 0; i < column; i++)
             {
-                // ƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ğ¶¬‚µ‚Ü‚·B
-                GameObject obj = Instantiate(prefabObj, Vector3.zero, Quaternion.identity);
+                // ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã‚’ç”Ÿæˆã—ã¾ã™ã€‚
+                GameObject obj = Instantiate(prefabBlock, Vector3.zero, Quaternion.identity);
 
-                // ƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ÌeƒIƒuƒWƒFƒNƒg‚ğİ’è‚µ‚Ü‚·B
-                obj.transform.SetParent(parentTran);
-
-                // ƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ÌˆÊ’u‚ğİ’è‚µ‚Ü‚·B
+                // ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®ä½ç½®ã‚’è¨­å®šã—ã¾ã™ã€‚
                 float xPos = xOffset * i;
                 float yPos = yOffset * j;
-                obj.transform.localPosition = new Vector3(xPos - 30, yPos, 0.5f);
+                obj.transform.localPosition = new Vector3(xPos - 30.0f, yPos, 0.5f);
             }
         }
     }
 
-    public void stage2create()
+    public void DestroyBlock()
     {
-        row = 5;
-        column = 4;
-        block_number = 20;
-        xOffset = 20f;
-        yOffset = 10f;
-        CreateBlockObject();
+        if(--block_number <= 0){
+            createStage2();
+        }
+    }
+
+    public void FallBall()
+    {
+        life--;
+        life_rest.text = "life : " + life;
+
+        if (life <= 0)
+        {
+            gameover();
+        }
+    }
+
+    void gameover()
+    {
+#if UNITY_EDITOR
+        UnityEditor.EditorApplication.isPlaying = false;
+#endif
     }
 }
 
