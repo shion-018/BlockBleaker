@@ -4,23 +4,23 @@ using UnityEngine;
 
 public class PlayerScript : MonoBehaviour
 {
-    Vector3 mousePos, pos;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    [SerializeField] BallScript ball = default!;
 
     // Update is called once per frame
     void Update()
     {
-        //ƒ}ƒEƒX‚ÌÀ•W‚ğæ“¾‚·‚éS
-        mousePos = Input.mousePosition;
-        //ƒ}ƒEƒXˆÊ’u‚ğŠm”F
+        //ãƒã‚¦ã‚¹ã®åº§æ¨™ã‚’å–å¾—ã™ã‚‹S
+        Vector3 mousePos = Input.mousePosition;
+        //ãƒã‚¦ã‚¹ä½ç½®ã‚’ç¢ºèª
         //Debug.Log(mousePos);
-        //ƒXƒNƒŠ[ƒ“À•W‚ğƒ[ƒ‹ƒhÀ•W‚É•ÏŠ·‚·‚é
-        pos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, 220, 116f));
-        //ƒ[ƒ‹ƒhÀ•W‚ğƒQ[ƒ€ƒIƒuƒWƒFƒNƒg‚ÌÀ•W‚Éİ’è‚·‚é
+        //ã‚¹ã‚¯ãƒªãƒ¼ãƒ³åº§æ¨™ã‚’ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã«å¤‰æ›ã™ã‚‹
+        Vector3 pos = Camera.main.ScreenToWorldPoint(new Vector3(mousePos.x, 220, 116f));
+        //ãƒ¯ãƒ¼ãƒ«ãƒ‰åº§æ¨™ã‚’ã‚²ãƒ¼ãƒ ã‚ªãƒ–ã‚¸ã‚§ã‚¯ãƒˆã®åº§æ¨™ã«è¨­å®šã™ã‚‹
         transform.position = pos;
+
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            ball.Shoot();
+        }
     }
 }
